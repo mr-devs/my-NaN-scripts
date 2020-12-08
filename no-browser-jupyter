@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# A script to connect remotely to a jupyter notebook that has been started with the --no-browser 
+# and --port=<insert port number> flags on a remote server.
+
+# If you have a mac, you can save a copy of this script to the /usr/local/bin/ and
+# then, after restarting your terminal, you should be able to run this command from
+# the command line.
+
+# Author: Matthew DeVerna
+# Date  : ~Nov. 2020 
+
+# Ask for the server address
+echo "What server are we going to be running our Jupyter Notebook from?"
+echo "~~~> Please type something like: mdeverna@gh.luddy.indiana.edu"
+read server
+
+# What port?
+echo "~~~~~~~~~~"
+echo "And what port would you like to run on?"
+echo "Please type something like: 8890"
+read input_port
+
+# Call the command
+echo "~~~~~~~~~~"
+echo "Connecting to port: ssh -N -f -L localhost:$input_port:localhost:$input_port $server"
+ssh -N -f -L localhost:$input_port:localhost:$input_port $server
