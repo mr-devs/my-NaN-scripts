@@ -3,9 +3,9 @@
 # A script to connect remotely to a jupyter notebook that has been started with the --no-browser 
 # and --port=<insert port number> flags on a remote server.
 
-# If you have a mac, you can save a copy of this script to the /usr/local/bin/ and
-# then, after restarting your terminal, you should be able to run this command from
-# the command line.
+# Where ever you save this file, add that directory to your $PATH, then restart your terminal.
+# Once this is done, you should be able to execture `no-browser-jupyter` from the
+# command line. 
 
 # Author: Matthew DeVerna
 # Date  : ~Nov. 2020 
