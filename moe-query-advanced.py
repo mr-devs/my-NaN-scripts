@@ -6,13 +6,24 @@ options by calling "python3 moe-query-advanced.py -h") and the
 script will walk you through the rest.
 
 NOTES FROM MOE'S TAVERN!
-The Moe's Tavern tool is available for research by Indiana University users only. All fields are required. You will receive an email with the results. Query results will be auto-deleted after a few days. All requests are logged. READ THESE NOTES CAREFULLY:
+The Moe's Tavern tool is available for research by Indiana University users only. 
+All fields are required. You will receive an email with the results. 
+Query results will be auto-deleted after a few days. All requests are logged. 
+READ THESE NOTES CAREFULLY:
+  - Data is available only for the past 36 months, so queries beginning before 36 
+  months ago will fail.
+  - Moe's Tavern returns at most 1 million tweet ids. If the number is exceeded,
+  the results will be truncated. Check if the number of tweets matches the limit
+  to determine if the results were truncated.
+  - Sometimes, you might get out-of-memory errors from the query. The memory limit
+  may depend on the combination of query load and cluster load. You will get an
+  error if the memory limit is exceeded, shortly after the query is submitted.
+  - If your job takes more than two hours, it will be killed. Check the error file
+  (error.log) for details. If this happens, modify your query so that it will take
+  less time.
+  - Please beware that prior to 2020-08-12, entities (e.g., links and hashtags)
+  in extended tweets were truncated.
 
-    Data is available only for the past 36 months, so queries beginning before 36 months ago will fail.
-    Moe's Tavern returns at most 1 million tweet ids. If the number is exceeded,the results will be truncated. Check if the number of tweets matches the limit to determine if the results were truncated.
-    Sometimes, you might get out-of-memory errors from the query. The memory limit may depend on the combination of query load and cluster load. You will get an error if the memory limit is exceeded, shortly after the query is submitted.
-    If your job takes more than two hours, it will be killed. Check the error file (error.log) for details. If this happens, modify your query so that it will take less time.
-    Please beware that prior to 2020-08-12, entities (e.g., links and hashtags) in extended tweets were truncated.
 Site Location: https://carl.cs.indiana.edu/moe/
 
 """
