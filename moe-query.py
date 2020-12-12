@@ -4,8 +4,10 @@ import urllib.request
 import sys
 
 # Comes from the Tavern interface. Copy & paste.
-url = 'https://carl.cs.indiana.edu/moe/api/submit_query?token=89b98ddc-3d81-4780-ad5b-0076e31d68ef'
-payload = payload = {
+# THE URL BELOW WILL NEED TO BE UPDATED TO USE THIS SCRIPT.
+url = 'https://carl.cs.indiana.edu/moe/api/submit_query?token=4b720572-6067-461d-bd02-8e1cc81290f0'
+
+payload = {
   "email": "mdeverna@iu.edu",
   "qtype": "meme",
   "q": "#blessed",
