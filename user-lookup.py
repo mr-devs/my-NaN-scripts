@@ -187,7 +187,14 @@ def main():
             json_response = connect_to_endpoint(oauth, params)
             data = json_response.get("data")
             errors = json_response.get("errors")
-            data_file.writelines(f"{json.dumps(line)}\n" for line in data)
+            
+            # No matter what `data` and `errors` will return, however, they may return `None`.
+            try:
+                data_file.writelines(f"{json.dumps(line)}\n" for line in data)
+            except TypeError:
+                print("No USER data found in this set of users, skipping to the next set.")
+                pass
+            
             try:
                 error_file.writelines(f"{json.dumps(line)}\n" for line in errors)
             except TypeError:
