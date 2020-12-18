@@ -55,10 +55,10 @@ def auth():
     object that we call Twitter with."""
 
     # Place user API keys here.
-    consumer_key        = "VvIkzmSTHQtZWW6Map6qUTpEJ"
-    consumer_secret     = "BpAnC8ejOOZgjBwG0DexQNdBiia259UNmS7yUfQbGpN8z0T0uZ"
-    access_token        = "1312850357555539972-tuIRugj9vGuIceDnajSSEqmA4zTSP2"
-    access_token_secret = "tsiBH8gLTAaf2TDBGcZXmtmUOAU3XpZMqUQjBhIJ8WIsj"
+    consumer_key        = ""
+    consumer_secret     = ""
+    access_token        = ""
+    access_token_secret = ""
 
     # Get oauth object
     oauth = OAuth1Session(
