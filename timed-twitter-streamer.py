@@ -1,5 +1,37 @@
 #!/usr/bin/env python3
 
+"""
+PURPOSE: A command line script to run a TIMED filtered stream
+with the Twitter V2 endpoint.
+
+This script is designed to inheret read in your app's
+bearer token after being set on the command line via:
+    export 'BEARER_TOKEN'='YOUR_BEARER_TOKEN'
+
+!!! !!! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ !!! !!!
+NOTE: 
+This script is not finished. Still need to properly
+handle disconnections and errors. 
+!!! !!! ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ !!! !!!
+
+Twitter References for the Filtered Stream Endpoint:
+- https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/api-reference
+- https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/api-reference/post-tweets-search-stream-rules
+- https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/integrate/build-a-rule
+
+Script Features:
+- Can receive a file of "rules" for your twitter stream
+    - Each line is read in as a string representing one rule
+    - Rules can be 512 characters long
+    - You can have a maximum of 25 rules
+- If no file is given, a user input is required and 
+    commandline direction is provided by the script.
+
+Author: Matthew DeVerna
+Date: 12/14/2020
+"""
+
+
 # Import packages
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -27,13 +59,19 @@ parser.add_argument(
   type = float,
   help="How many hours would you like your script to run? (integer > 0. 1 = one hour, .5 = half and hour, etc. )"
   )
+parser.add_argument(
+  "-f", "--file", 
+  metavar='File',
+  help="Full path to the file containing terms you would like to include. (One object (i.e. hashtag) per line)"
+  )
 
 # Read parsed arguments from the command line into "args"
 args = parser.parse_args()
 
 # Assign them to objects
 t = args.time
-time2run = (60**2 * t)
+time2run = (60**2 * t) # This turns the user input "1" into one hour
+file = args.file
 
 
 
@@ -116,7 +154,7 @@ def get_stream(headers, time2run):
     stopped.
     """
     response = requests.get(
-        "https://api.twitter.com/2/tweets/search/stream?tweet.fields=entities",
+        "https://api.twitter.com/2/tweets/search/stream?tweet.fields=entities,author_id",
         headers=headers,
         stream=True,
     )
@@ -128,7 +166,7 @@ def get_stream(headers, time2run):
             )
         )
 
-    today = dt.strftime(dt.today(), "%Y-%m-%d")
+    today = dt.strftime(dt.today(), "%Y-%m-%d_%M")
     with open(f"streaming_data--{today}.json", "w") as f:
 
         try:
@@ -140,12 +178,13 @@ def get_stream(headers, time2run):
 
                 if time.time() > t_end:
                     raise KeyboardInterrupt()
+
                 if response_line:
                     json_response = json.loads(response_line)
                     f.write(f"{json.dumps(json_response)}\n")
 
         except KeyboardInterrupt:
-            sys.exit("Script manually entered or the indicated time ran out.")
+            sys.exit("Script manually ended or the indicated time ran out.")
 
 def another_rule():
     answer = None 
@@ -210,11 +249,11 @@ def import_rules():
 
 if __name__ == "__main__":
 
-    try:
-        # Load bearer token into program
-        bearer_token = os.environ.get("BEARER_TOKEN")
-    except:
-        sys.exit("\nERROR: You forgot to set your bearer token!\n\n Do this by running:  export 'BEARER_TOKEN'='<your_bearer_token>'")
+    # Load the bearer token
+    bearer_token = os.environ.get("BEARER_TOKEN")
+    if bearer_token is None:
+        raise TypeError("\nYou forgot to set your bearer token!\n\n Do this by running:  \
+            export 'BEARER_TOKEN'='<your_bearer_token>' in the command line terminal.")
 
     # Create header w/ bearer to authorize stream
     headers = create_headers(bearer_token)
@@ -222,18 +261,31 @@ if __name__ == "__main__":
     # Get existing rules set from any old streams
     rules = get_rules(headers, bearer_token)
 
-    # Delete them
+    # Delete them for a clean slate
     delete = delete_all_rules(headers, bearer_token, rules)
 
-    all_rules = import_rules()
+    ### Get rules. ###
 
-    # Set the new rules
+    # If file was passed...
+    if file:
+        all_rules = []
+
+        # Open the file and load into a list
+        with open(file, "r") as f:
+            for line in f:
+                all_rules.append(line)
+
+    # If not, call the user input option.
+    else:
+        all_rules = import_rules()
+
+    # Set the new rules we just loaded/imported
     set_rules(headers, all_rules)
 
-    # Print them so the user knows what they're looking for...
+    # Print them so the user knows what they're streaming...
     print("\nRULES:\n\n")
     for num, rule in enumerate(all_rules):
-      print(f"{num + 1}.",rule.get("value"))
+      print(f"#{num + 1}.",rule.get("value"))
       print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 
     # Start streamer
