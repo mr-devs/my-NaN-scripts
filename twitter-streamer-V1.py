@@ -179,6 +179,8 @@ class Listener(StreamListener):
 
         return True
 
+
+
     def on_error(self, status_code):
         # Log error with exception info
         logging.error(f"Error, code {status_code}", exc_info=True) 
@@ -201,7 +203,7 @@ class Listener(StreamListener):
 
             # Wait five minutes
             time.sleep(300)
-
+            return True
 
 
 
@@ -252,5 +254,9 @@ if __name__ == '__main__':
         except KeyboardInterrupt:
             logging.info("User manually ended stream with a Keyboard Interruption.")
             sys.exit("\n\nUser manually ended stream with a Keyboard Interruption.\n\n")
+        except Exception as e:
+            logging.debug('Unexpected exception: %s %e')
+            continue
+
 
 
