@@ -211,7 +211,7 @@ def load_terms(file):
     filter_terms = []
     with open(file, "r") as f:
         for line in f:
-            logging.info(f"Loaded Filter Rule: {line.strip('\n')}")
+            logging.info("Loaded Filter Rule: {}".format(line.strip('\n')))
             filter_terms.append(line.strip("\n"))
 
     return filter_terms
