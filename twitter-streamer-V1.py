@@ -212,7 +212,7 @@ def load_terms(file):
     with open(file, "r") as f:
         for line in f:
             logging.info(f"Loaded Filter Rule: {line.strip("\n")}")
-            filter_terms.append(line)
+            filter_terms.append(line.strip("\n"))
 
     return filter_terms
 
