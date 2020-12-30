@@ -116,12 +116,14 @@ class Listener(StreamListener):
         time,
         log_filename,
         total_tweets,
-        todays_tweets
+        todays_tweets,
+        rate_limits,
         ):
         self._time = time
         self._log_filename = log_filename
         self._total_tweets = total_tweets
         self._todays_tweets = todays_tweets
+        self._rate_limits = rate_limits
 
     def on_data(self, data):
         today = dt.strftime(dt.now(), "%m-%d-%Y")
@@ -235,7 +237,8 @@ if __name__ == '__main__':
         time = dt.strftime(dt.now(), '%m-%d-%Y_%H-%M-%S'),
         log_filename = log_filename,
         total_tweets = 0,
-        todays_tweets = 0
+        todays_tweets = 0,
+        rate_limits= 0
         )
     auth = OAuthHandler(api_key, api_key_secret)
     auth.set_access_token(access_token, access_token_secret)
