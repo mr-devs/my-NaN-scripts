@@ -81,7 +81,7 @@ logging.info("Parsing Command Line Arguments...")
 
 # Initiate the parser w. a simple description.
 parser = argparse.ArgumentParser(
-  description="Scrape real-time tweets from Twitter using the V1 API using based on keywords passed via file."
+  description="Scrape real-time tweets from Twitter using the V1 API based on keywords passed via file."
   )
 # Add optional arguments
 parser.add_argument(
