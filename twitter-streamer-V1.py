@@ -43,7 +43,7 @@ from email.mime.text import MIMEText
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Get current time
-now = dt.strftime(dt.now(), '%m-%d-%Y_%H-%M-%S')
+now = dt.strftime(dt.now(), '%m-%d-%Y %H-%M-%S')
 
 # Define file handler and set logger formatter
 log_filename = f"{now}_stream.log"
@@ -52,7 +52,7 @@ log_filename = f"{now}_stream.log"
 logging.basicConfig(
     filename= log_filename,
     format='%(levelname)s - %(asctime)s | %(message)s',
-    datefmt= "%m-%d-%Y_%H-%M-%S",
+    datefmt= "%m-%d-%Y %H-%M-%S",
     level= logging.INFO)
 
 
