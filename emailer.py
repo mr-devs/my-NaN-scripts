@@ -84,7 +84,7 @@ def send_email(email_message, emailType):
         server.login(myEmail, password)
         server.sendmail(myEmail, destEmail, message.as_string())
         server.close()
-        logging.info(f"[*] ~{displayType}~ email sent successfully.\n")
+        logging.info(f"[*] ~{displayType}~ email sent successfully.")
         
 
     except Exception as e:
