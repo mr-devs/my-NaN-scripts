@@ -158,8 +158,8 @@ class Listener(StreamListener):
         return True
 
     def on_error(self, status):
-        logging.error("Error, code {}".format(status_code))
-        if status_code == 420:
+        logging.error("Error, code {}".format(status))
+        if status == 420:
             time.sleep(300)
 
 def load_terms(file):
