@@ -193,7 +193,7 @@ if __name__ == '__main__':
     logging.info("Starting the stream...")
     while True:
         try:
-            stream.filter(track=filter_terms)
+            stream.filter(track=filter_terms, languages=["en"])
         except KeyboardInterrupt:
             logging.info("User manually ended stream with a Keyboard Interruption.")
             sys.exit("\n\nUser manually ended stream with a Keyboard Interruption.\n\n")
