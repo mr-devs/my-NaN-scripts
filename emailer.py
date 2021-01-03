@@ -24,122 +24,121 @@ Author: Matthew R. DeVerna
 
 import smtplib
 from email.message import EmailMessage
-import argparse
-import datetime
 import logging
 import sys
-import os
 
-class eMessages:
+
+def send_email(
+    email_lines = list,
+    subject = str,
+    from_email = str,
+    password = str,
+    to_emails = list,
+    log_name = "Not Set.",
+    host = 'smtp.gmail.com',
+    port = 465
+    ):
     """
-    Class to create the body of the email to send.
-    - Methods:
-        - daily_update: returns daily update email message
-        - rate_limit: returns rate limiting email message
-    Note: 
-        - To create new email body text formats, simply 
-        create a new method which returns the text you want.
-        - Remember to add any new parameters to __init__() 
-        so they can be utilized in the email message.
+    Send email message based on parameters provided.
+
+    Required Paramters:
+    - email_lines (list): A list of lines for the email. Each line 
+    in the list concatenated together with a next line character
+        (for example, via "\\n ".join(email_lines))
+    - subject (str): The subject headline of the email
+    - from_email: The email address which you'd like to send the 
+    email from.
+    - password (str): Password for `from_email`
+    - to_emails (list): Emails to send the email to.
+    - log_name (str): If using send_email within another script 
+    that is writing updates to a log, this will be the name referred
+    to in the log file.
+        - default = "Not Set."
+
+    Optional Paramters:
+    - host (str): Host to use for email sending. See smtplib for details
+        - default = "smtp.gmail.com" for sending from gmail email accounts
+    - port (int): Port to use for email sending
+
+    Example Usage:
+    #import packages
+    import os
+    from emailer import send_email
+
+    # Use os to load email password from terminal environment
+    password = os.environ.get("EMAIL_PWD")
+    # Set subject line of email
+    subject = "test email"
+    # Create email body content. Each list object is one line
+    lines = ["Like, this is your father.", "OMG, no way!" "**akward silence**", "Goodbye.","\t-Darth Vadar"]
+    # Set emails
+    from_ = "sendfromthisemail@gmail.com"
+    send2 = ["receiver1@gmail.com","receiver2@gmail.com"]
+    # Call Function
+    send_email(
+        email_lines = lines,
+        subject = subject,
+        log_name = "test email",
+        from_email = from_,
+        password = password,
+        to_emails = send2)
     """
-    def __init__(
-        self,
-        time = "",
-        log_filename = "",
-        total_tweets = 0,
-        todays_tweets = 0,
-        rate_limits = 0
-    ) -> None:
-        self._time = time
-        self._log_filename = log_filename
-        self._total_tweets = total_tweets
-        self._todays_tweets = todays_tweets
-        self._rate_limits = rate_limits
 
-    def daily_update(self):
-        """Return body of daily update email text."""
-        message = f"""
-        || ~~~ This is an automated message from the Twitter Streamer ~~~ ||
-
-                STREAM IS RUNNING - THIS IS AN UPDATE.
-
-                DETAILS:
-                System Report Time: {self._time}
-                Total Tweets Processed: {self._total_tweets}
-                Total Tweets Today: {self._todays_tweets}
-                Log Filename: {self._log_filename}
-                ************************************************************
-
-        Thanks!
-        - StreamerBot"""
-        return message
-
-    def rate_limit(self):
-        """Return body of rate limit email text."""
-        message = f"""
-        || ~~~ This is an automated message from the Twitter Streamer ~~~ ||
-
-                THE STREAM IS BEING RATE LIMITED AND WILL WAIT 5 MINUTES.
-
-                DETAILS:
-                System Report Time: {self._time}
-                Log Filename: {self._log_filename}
-                Number of Times Rate Limited: {self._rate_limits}
-                ******************************
-
-        Thanks!
-        - StreamerBot"""
-        return message
-
-
-def send_email(email_message, emailType):
-    """
-    Send email message from present email address
-    to preset recipient(s).
-    """
-    # Set email addresses and trash email password
-    myEmail = "devsmoo790@gmail.com"
-    destEmail = ["mdeverna@iu.edu", "mdeverna2790@gmail.com"]
-    password = os.environ.get("TRASH_EMAIL_PWD")
+    # Check types
+    if not isinstance(email_lines, list):
+        raise TypeError("`email_lines` must be a list where each line represents one line in the body of the email email")    
+    if not isinstance(subject, str):
+        raise TypeError("`subject` must be a string")
+    if not isinstance(log_name, str):
+        raise TypeError("`log_name` must be a string")
+    if not isinstance(from_email, str):
+        raise TypeError("`from_email` must be a string")
+    if not isinstance(password, str):
+        raise TypeError("`password` must be a string")
+    if not isinstance(to_emails, list):
+        raise TypeError("`to_emails` must be a string")
+    if not isinstance(host, str):
+        raise TypeError("`host` must be a string")
+    if not isinstance(port, int):
+        raise TypeError("`port` must be a string")
 
     # Create message container 
     msg = EmailMessage()
 
     # Create the body of the email
-    msg.set_content(email_message)
-
-    # Create subject, and display type (for errors, etc)
-    # for the message container based on emailType passed
-    if emailType == 'rate_limit':
-        subject = "[STREAM] - RATE LIMIT"
-        displayType = "ERROR"
-
-    elif emailType == 'daily_update':
-        subject = "[STREAM] - Daily Update: Details on Stream"
-        displayType = "Daily Update"
+    msg.set_content("\n".join(email_lines))
 
     # Update message container will all information
     msg['Subject'] = subject
-    msg['From'] = myEmail
-    msg['To'] = ",".join(destEmail) # Must convert to single string
+    msg['From'] = from_email
+
+    # This if-statement handles whether one vs. multiple
+    # emails are provided.
+    if len(to_emails) == 1:
+        msg["To"] = str(to_emails[0])
+    else:
+        to_emails = [str(x) for x in to_emails] # Ensure all emails are strigns
+        msg['To'] = ",".join(to_emails)         # Convert to single string
 
     try:
         logging.info("[*] Communicating with mail server...")
-        server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+        server = smtplib.SMTP_SSL(host, port)
         server.ehlo()
         # Authorize the sending email address with provided password
-        server.login(myEmail, password)
+        server.login(from_email, password)
         server.send_message(
             msg = msg,
-            from_addr = myEmail,
-            to_addrs = destEmail
+            from_addr = from_email,
+            to_addrs = to_emails
             )
         server.close()
-        logging.info(f"[*] ~{displayType}~ email sent successfully.")
+        logging.info(f"[*] Email sent successfully. Email Type: ~{log_name}~")
+        print("Email sent successfully.")
         
     # Catch all exceptions, log them, and keep going
-        # We don't want to break our streamer as a result of a
+        # We don't want to break something as a result of a
         # weird email problem.
     except Exception as e:
-        logging.info(f"[!] Exception Encountered: ~{displayType}~", e)
+        logging.info(f"[!] Exception Encountered. Email Type: ~{log_name}~", e)
+        print(f"[!] Exception Encountered. Email Type: ~{log_name}~", e)
         pass
