@@ -2,8 +2,19 @@
 PURPOSE
     - A module for sending emails.
 
-send_email: a method for sending an email. See docstring for 
-parameters and example usage.
+METHODS
+    - send_email: 
+        - A method for sending an email. See docstring for 
+        parameters and example usage.
+
+SECURITY NOTE: 
+    - If you want to send from a gmail account, you 
+    need to turn ON "Less secure app access":
+        - https://support.google.com/accounts/answer/6010255
+    - Since this is not a good idea for your main 
+    email account, you probably want to create a throwaway
+    email account for sending emails.
+
 
 Created: 01/02/2021
 Author: Matthew R. DeVerna
@@ -73,7 +84,7 @@ def send_email(
 
     # Check types
     if not isinstance(email_lines, list):
-        raise TypeError("`email_lines` must be a list where each line represents one line in the body of the email email")    
+        raise TypeError("`email_lines` must be a list where each line represents one line in the body of the email")    
     if not isinstance(subject, str):
         raise TypeError("`subject` must be a string")
     if not isinstance(log_name, str):
