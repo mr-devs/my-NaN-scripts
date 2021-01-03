@@ -57,7 +57,7 @@ def send_email(
     # Set subject line of email
     subject = "test email"
     # Create email body content. Each list object is one line
-    lines = ["Like, this is your father.", "OMG, no way!" "**akward silence**", "Goodbye.","\t-Darth Vadar"]
+    lines = ["Luke, this is your father.", "OMG, no way!" "**akward silence**", "Goodbye.","\t-Darth Vadar"]
     # Set emails
     from_ = "sendfromthisemail@gmail.com"
     send2 = ["receiver1@gmail.com","receiver2@gmail.com"]
