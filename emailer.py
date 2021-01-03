@@ -1,24 +1,11 @@
 """
 PURPOSE
-    - A module for sending emails that are triggered by events occuring
-    in conjunction with the twitter-streamer-V1.py script.
+    - A module for sending emails.
 
-eMessages: A class for creating the body of the email to be sent.
-    - When called, the user initializes the class with the needed
-    parameters and then calls the method representative of the email
-    that they want to send. Each method (daily_update, rate_limit, etc.)
-    simply constructs and then returns that text message.
-send_email: a method for sending the email.
-    - Takes in the body of the message created by eMessage methods as
-    well as the emailType, which controls the email subject as well as
-    the phrase used in logging, etc.
+send_email: a method for sending an email. See docstring for 
+parameters and example usage.
 
-REMEMBER TO SET MANUALLY
-- myEmail
-- destEmail (list)
-- password (best read from environment variables with os.environ.get("VARIABLE_NAME"))
-
-Created: 12/31/2020
+Created: 01/02/2021
 Author: Matthew R. DeVerna
 """
 
