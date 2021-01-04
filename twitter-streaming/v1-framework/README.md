@@ -26,6 +26,3 @@
 3. Edit the paths within the checkprocess.sh file to match your own project directory.
 4. Change directories to the `data/` folder and run `bash persistent_bash_streamer.sh`. This will begin streaming tweets which include the terms in the keywords file that you are providing `twitter-streamer-V1.py`
 5. (Optional) Add the above line to your cron jobs by calling `crontabs -e` and pasting the above line into that file. 
-
-
-
