@@ -1,0 +1,19 @@
+checkprocess.sh has discovered the twitter-streamer-V1.py script 
+is no longer running.
+
+*** This means that the Twitter stream broke within the last minute. ***
+
+The cron job which discovered this problem is designed to automatically
+restart the persistent-streamer.sh script. 
+
+This script creates an infinite bash while-loop that continuously 
+restarts the twitter-streamer-V1.py streaming script in case it falls
+over again.
+
+As a result, the problem *should* be fixed and another stream is likely
+up and running already. 
+
+*** However, make sure you check everything restarted correctly. ***
+
+With love,
+- CronBot
