@@ -3,12 +3,21 @@
 # A script to connect remotely to a jupyter notebook that has been started with the --no-browser 
 # and --port=<insert port number> flags on a remote server.
 
-# Where ever you save this file, add that directory to your $PATH, then restart your terminal.
-# Once this is done, you should be able to execture `no-browser-jupyter` from the
-# command line. 
+# How to set this up so that you can run this command from anywhere:
+# 1. Save this file here: /usr/local/bin (Mac specific)
+#   1.a You can save this anywhere but the important thing is that the directory is in the $PATH
+#   1.b You can check what directories are in your path by running `export $PATH`
+# 2. Make the file executable: `chmod +x /usr/local/bin/no-browser-jupyter`
+#   2.a If you are juggling annoying permissions, you can use `chmod 777 /usr/local/bin/no-browser-jupyter`
+#       which gives everyone read, write, and execute permissions
+# 3. Make sure that the path to your .ssh/config file is accurate below
+# 4. Restart your terminal and it should now work
 
 # Author: Matthew DeVerna
 # Date  : ~Nov. 2020 
+
+# Print your ssh config file as reference
+cat ~/.ssh.config
 
 # Ask for the server address
 echo "What server are we going to be running our Jupyter Notebook from?"
